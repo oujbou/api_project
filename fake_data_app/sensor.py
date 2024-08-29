@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 import sys
 
 import numpy as np
@@ -6,12 +6,20 @@ import numpy as np
 
 class VisitSensor:
 
-    def __init__(self, avg_visit: int, std_visit: int ) -> None:
+    def __init__(
+            self,
+            avg_visit: int,
+            std_visit: int,
+            perc_break: float = 0.015,
+            perc_malfunction : float = 0.035
+        ) -> None:
         self.avg_visit = avg_visit
         self.std_visit = std_visit
+        self.perc_malfunction = perc_malfunction
+        self.perc_break = perc_break
     
 
-    def simulate_visit(self, business_date: date) -> int:
+    def simulate_visit_count(self, business_date: date) -> int:
         
         np.random.seed(seed=business_date.toordinal())
 
@@ -31,6 +39,27 @@ class VisitSensor:
             visit = -1
         
         return np.floor(visit)
+    
+    def get_visit_count(self, business_date: date) -> int:
+        """returns the number of the persons detected by the sensor during the day"""
+
+        np.random.seed(seed=business_date.toordinal())
+        proba_malfunction = np.random.random()
+
+        #the sensor can break sometimes
+        if proba_malfunction < self.perc_break:
+            print("break")
+            return 0
+        
+        visit = self.simulate_visit_count(business_date)
+
+        # The sensor can also malfunction
+        if proba_malfunction < self.perc_malfunction:
+            print("malfunction")
+            visit = np.floor(visit * 0.2) # make it so bad we can detect it!
+        
+        return visit
+
 
 
 if __name__ == "__main__":
@@ -41,7 +70,17 @@ if __name__ == "__main__":
     queried_date = date(year, month, day)
 
     capteur = VisitSensor(avg_visit=1500, std_visit=150)
-    print(capteur.simulate_visit(date(year=2024, month=8, day=29)))
-    print(capteur.avg_visit)
+
+    # Test to verify malfunction and break
+
+    init_date = date(year=2024, month=1, day=1)
+
+    while init_date < date(year=2024, month=8, day=31):
+        init_date += timedelta(days=1)
+        visit_count = capteur.get_visit_count(init_date)
+        print(init_date, visit_count)
+    
+    # print(capteur.simulate_visit(date(year=2024, month=8, day=29)))
+    # print(capteur.avg_visit)
 
 
