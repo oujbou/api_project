@@ -70,17 +70,9 @@ if __name__ == "__main__":
     queried_date = date(year, month, day)
 
     capteur = VisitSensor(avg_visit=1500, std_visit=150)
-
-    # Test to verify malfunction and break
-
-    init_date = date(year=2024, month=1, day=1)
-
-    while init_date < date(year=2024, month=8, day=31):
-        init_date += timedelta(days=1)
-        visit_count = capteur.get_visit_count(init_date)
-        print(init_date, visit_count)
+    capteur2 = VisitSensor(avg_visit=2000, std_visit=200)
+    print(capteur.get_visit_count(queried_date))
+    print(capteur2.get_visit_count(queried_date))
     
-    # print(capteur.simulate_visit(date(year=2024, month=8, day=29)))
-    # print(capteur.avg_visit)
 
 
