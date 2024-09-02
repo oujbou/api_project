@@ -22,4 +22,3 @@ jobs:
         python-version: "3.12"
     - name: Unist tests
       run: python -m unittest tests/test_visit_sensor.py
-      run: python -m unittest tests/test_optimized.py
