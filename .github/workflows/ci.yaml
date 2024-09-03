@@ -27,3 +27,6 @@ jobs:
     
     - name: Unit tests
       run: python -m unittest tests/test_visit_sensor.py
+    
+    - name: Unit tests for store methods
+      run: python -m unittest tests/test_store_methods.py
