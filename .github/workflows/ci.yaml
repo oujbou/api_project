@@ -30,3 +30,6 @@ jobs:
     
     - name: Unit tests for store methods
       run: python -m unittest tests/test_store_methods.py
+
+    - name: Reformat the files with black
+      run: black .
